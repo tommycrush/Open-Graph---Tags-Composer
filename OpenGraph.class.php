@@ -1,17 +1,25 @@
 <?php
 
-
 class OpenGraph {
 
-	public static $generic_tags = array(
+	// These property => content assignments are added to every initial composeTags call
+	// Note: these attributes can be overriden. For example, if "type" appears in the $tags
+	//   given to composeTags, then the "og:type" parameter given here is passed over.
+	// Also: Notice how the prefixes are attached here, this is for custom uses (like 'fb')
+	public static $universal_tags = array(
 		"og:type" => "website",
-		"fb:admins" => "USER_ID",
+		"fb:admins" => "YOUR_USER_ID",
 		"fb:app_id" => "APP_ID"
 	);
 
+
+	// If all tags should begin with something (like 'og:'), delcare here. 'og:' is default
 	public static $prefix = "og:";
 
 
+	// call this function to compose the meta tags
+	// pass an array of tags, see below for example
+	// This returns a string of meta tags
 	public static function composeTags($tags, $prefix = self::$prefix){
 		$html = "";
 
@@ -28,7 +36,7 @@ class OpenGraph {
 		}
 
 		if($prefix == self::$prefix){
-			foreach(self::$generic_tags as $property => $content){
+			foreach(self::$universal_tags as $property => $content){
 				if(!array_key_exists($property, $tags)){
 					$html .= self::composeTag($content, $property);
 				}
@@ -38,15 +46,19 @@ class OpenGraph {
 		return $html;
 	} 
 
-
+	//helper function to compose individual tag
 	public static function composeTag($value, $name){
 		return '<meta property="'.$name.'" content="'.$value.'" />';
 	}
 
 }
 
+
+
+/*
+*	the array is formatted in a 'property' => 'content' manner
+*/
 $data = array(
-	"type" => "website",
 	"title" => "This is this title",
 	"url" => "http://fierce-ocean-1626.herokuapp.com/og/OpenGraph.class.php",
 	"image" => array(
@@ -69,7 +81,32 @@ $data = array(
 	);
 
 
-echo "<html><head>".OpenGraph::composeTags($data)."</head><body>...</body></html>";
+echo OpenGraph::composeTags($data);;
+
+/*
+*
+* This example returns:
+
+<meta property="og:title" content="This is this title" />
+<meta property="og:url" content="http://fierce-ocean-1626.herokuapp.com/og/OpenGraph.class.php" />
+<meta property="og:image:url" content="http://mydomain.com/image.jpg" />
+<meta property="og:image:secure" content="https://mydomain.com/image.jpg" />
+<meta property="og:image:type" content="image/jpeg" />
+<meta property="og:image:width" content="400" />
+<meta property="og:image:height" content="300" />
+<meta property="og:video:url" content="http://fierce-ocean-1626.herokuapp.com/og/OpenGraph.class.php" />
+<meta property="og:video:actor" content="Tommy" />
+<meta property="og:video:role" content="Main Character" />
+<meta property="og:video:director" content="Tommy Crush" />
+<meta property="og:video:writer" content="Tommy Crush" />
+<meta property="og:video:tag" content="best,movie,ever" />
+<meta property="og:video:release_date" content="2012-11-30" />
+<meta property="og:type" content="website" />
+<meta property="fb:admins" content="USER_ID" />
+<meta property="fb:app_id" content="APP_ID" />
+
+*/
+
 ?>
 
 
