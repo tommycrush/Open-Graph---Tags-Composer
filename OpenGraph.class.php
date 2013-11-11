@@ -12,10 +12,8 @@ class OpenGraph {
 		"fb:app_id" => "APP_ID"
 	);
 
-
 	// If all tags should begin with something (like 'og:'), delcare here. 'og:' is default
 	public static $prefix = "og:";
-
 
 	// call this function to compose the meta tags
 	// pass an array of tags, see below for example
@@ -24,15 +22,12 @@ class OpenGraph {
 		$html = "";
 
 		foreach($tags as $property => $content){
-
 			$prefix_property = $prefix.$property;
-
 			if(is_array($content)){
 				$html .= self::composeTags($content, $prefix_property.":");
 			}else{
 				$html .= self::composeTag($content, $prefix_property);
 			}
-
 		}
 
 		if($prefix == self::$prefix){
@@ -52,8 +47,6 @@ class OpenGraph {
 	}
 
 }
-
-
 
 /*
 *	the array is formatted in a 'property' => 'content' manner
@@ -81,11 +74,10 @@ $data = array(
 	);
 
 
-echo OpenGraph::composeTags($data);;
+echo OpenGraph::composeTags($data);
 
 /*
-*
-* This example returns:
+This example returns:
 
 <meta property="og:title" content="This is this title" />
 <meta property="og:url" content="http://fierce-ocean-1626.herokuapp.com/og/OpenGraph.class.php" />
